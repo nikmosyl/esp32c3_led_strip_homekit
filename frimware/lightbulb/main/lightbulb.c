@@ -31,49 +31,54 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "esp_log.h"
+#include "Libs/internal_led/internal_led.h"
+#include "Libs/led_strip/led_strip_control.h"
+
+static hsb_t color_hsb = {
+        .hue = 0,
+        .saturation = 0,
+        .brightness = 10
+};
 
 static const char *TAG = "lightbulb";
 
-/**
- * @brief initialize the lightbulb lowlevel module
- */
 void lightbulb_init(void)
 {
     ESP_LOGI(TAG, "Dummy Light Driver Init.");
+    configure_led_strip();
+    internal_led_off();
 }
 
-/**
- * @brief turn on/off the lowlevel lightbulb
- */
 int lightbulb_set_on(bool value)
 {
     ESP_LOGI(TAG, "lightbulb_set_on : %s", value == true ? "true" : "false");
+    value == true ? led_strip_set(color_hsb) : led_strip_reset();
+
     return 0;
 }
 
-/**
- * @brief set the saturation of the lowlevel lightbulb
- */
 int lightbulb_set_saturation(float value)
 {
     ESP_LOGI(TAG, "lightbulb_set_saturation : %f", value);
+    color_hsb.saturation = value;
+
     return 0;
 }
 
-/**
- * @brief set the hue of the lowlevel lightbulb
- */
 int lightbulb_set_hue(float value)
 {
     ESP_LOGI(TAG, "lightbulb_set_hue : %f", value);
+    color_hsb.hue = value;
+    led_strip_set(color_hsb);
+
     return 0;
 }
 
-/**
- * @brief set the brightness of the lowlevel lightbulb
- */
 int lightbulb_set_brightness(int value)
 {
     ESP_LOGI(TAG, "lightbulb_set_brightness : %d", value);
+    color_hsb.brightness = value;
+    led_strip_set(color_hsb);
+
     return 0;
 }

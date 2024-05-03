@@ -22,7 +22,7 @@
  *
  */
 
-/* HomeKit Lightbulb Example
+/* HomeKit Lightbulb for esp32c3 custom board
 */
 
 #include <stdio.h>
@@ -43,6 +43,8 @@
 
 #include "lightbulb.h"
 
+#include "Libs/internal_led/internal_led.h"
+
 /* Comment out the below line to disable Firmware Upgrades */
 #define CONFIG_FIRMWARE_SERVICE
 
@@ -59,11 +61,12 @@ static const char *TAG = "HAP lightbulb";
 #define RESET_TO_FACTORY_BUTTON_TIMEOUT     10
 
 /* The button "Boot" will be used as the Reset button for the example */
-#define RESET_GPIO  GPIO_NUM_0
+#define RESET_GPIO  GPIO_NUM_9
 /**
  * @brief The network reset button callback handler.
  * Useful for testing the Wi-Fi re-configuration feature of WAC2
  */
+
 static void reset_network_handler(void* arg)
 {
     hap_reset_network();
@@ -160,8 +163,8 @@ static void lightbulb_thread_entry(void *arg)
         .name = "Esp-Light",
         .manufacturer = "Espressif",
         .model = "EspLight01",
-        .serial_num = "abcdefg",
-        .fw_rev = "0.9.0",
+        .serial_num = "202405030213",
+        .fw_rev = "0.1.0",
         .hw_rev = "1.0",
         .pv = "1.1.0",
         .identify_routine = light_identify,
@@ -183,7 +186,7 @@ static void lightbulb_thread_entry(void *arg)
     hap_acc_add_wifi_transport_service(accessory, 0);
 
     /* Create the Light Bulb Service. Include the "name" since this is a user visible service  */
-    service = hap_serv_lightbulb_create(true);
+    service = hap_serv_lightbulb_create(false);
     if (!service) {
         ESP_LOGE(TAG, "Failed to create LightBulb Service");
         goto light_err;
@@ -191,9 +194,9 @@ static void lightbulb_thread_entry(void *arg)
 
     /* Add the optional characteristic to the Light Bulb Service */
     int ret = hap_serv_add_char(service, hap_char_name_create("My Light"));
-    ret |= hap_serv_add_char(service, hap_char_brightness_create(50));
-    ret |= hap_serv_add_char(service, hap_char_hue_create(180));
-    ret |= hap_serv_add_char(service, hap_char_saturation_create(100));
+    ret |= hap_serv_add_char(service, hap_char_brightness_create(10));
+    ret |= hap_serv_add_char(service, hap_char_hue_create(30));
+    ret |= hap_serv_add_char(service, hap_char_saturation_create(90));
     
     if (ret != HAP_SUCCESS) {
         ESP_LOGE(TAG, "Failed to add optional characteristics to LightBulb");
@@ -205,6 +208,8 @@ static void lightbulb_thread_entry(void *arg)
     /* Add the Light Bulb Service to the Accessory Object */
     hap_acc_add_serv(accessory, service);
 
+
+    //DROP ?
 #ifdef CONFIG_FIRMWARE_SERVICE
     /*  Required for server verification during OTA, PEM format as string  */
     static char server_cert[] = {};
@@ -222,6 +227,7 @@ static void lightbulb_thread_entry(void *arg)
     }
     hap_acc_add_serv(accessory, service);
 #endif
+    //DROP ?
 
     /* Add the Accessory to the HomeKit Database */
     hap_add_accessory(accessory);
@@ -279,6 +285,8 @@ light_err:
 
 void app_main()
 {
+    internal_led_on();
+
     xTaskCreate(lightbulb_thread_entry, LIGHTBULB_TASK_NAME, LIGHTBULB_TASK_STACKSIZE,
             NULL, LIGHTBULB_TASK_PRIORITY, NULL);
 }
