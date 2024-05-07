@@ -13,7 +13,7 @@ static led_strip_handle_t led_strip;
 #define delay(x) vTaskDelay((x) / portTICK_PERIOD_MS)
 #define FLOW 30
 #define LED_STRIP_GPIO 7
-#define LED_COUNT 125
+#define LED_COUNT 10
 
 void configure_led_strip(void)
 {
