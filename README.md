@@ -13,6 +13,8 @@ Hardware и Frimware для контроллера адресной светод
 
 [веб превью altium 365](https://365.altium.com/files/029D88F9-241C-48A4-977B-14C8D9AD6741?variant=[No+Variations])
 
+Заказать можно [тут](https://www.pcbway.com/project/shareproject/ws2812esp32_3_v1_792a8e86.html)
+
 На плате:
 - [Входной разъём](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS22WR00/20422799) для питание контролера и светодиодной ленты (светодиодная лента WS2812 или аналогичная с питанием +5V)
 - [Выходной разъём](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS32WR00/20426575) для питания и управляющего сигнала адресной светодиодной лентой
