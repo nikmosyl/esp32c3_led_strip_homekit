@@ -1,14 +1,14 @@
 # ESP32 LED Strip WS2812 HomeKit
 Hardware и Frimware для контроллера адресной светодиодной ленты на базе ESP32-C3
 
-Hardware
+## Hardware
 
 <kbd>
-  <img src="/ReadMe/Img/top.png" height=200>
+  <img src="/Readme/Img/top.png" weight=50>
 </kbd>
 
 <kbd>
-  <img src="/ReadMe/Img/bottom.png" height=200>
+  <img src="/Readme/Img/bottom.png" weight=50>
 </kbd>
 
 [веб превью altium 365](https://365.altium.com/files/029D88F9-241C-48A4-977B-14C8D9AD6741?variant=[No+Variations])
@@ -18,26 +18,29 @@ Hardware
 - [Выходной разъём](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS32WR00/20426575) для питания и управляющего сигнала адресной светодиодной лентой
 - USB type C для программирования контроллера ESP32-C3
 
-Frimware
+## Frimware
 Основано на [SDK](https://github.com/espressif/esp-homekit-sdk) от Espressif 
 
-Общие шаги по установке c использованием исходников (или простой путь с [zip](https://github.com/nikmosyl/esp32c3_led_strip_homekit/blob/zip/frimware/esp32c3_led_strip_homekit.zip) архивом):
+Общие шаги по установке c использованием исходников:
 
-1. Установить [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/get-started/linux-macos-setup.html)
+### 1. Установить [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/get-started/linux-macos-setup.html)
 Предпочительная версия v5.2.1
+
 Предпочтительное место установки в корень домашней директории ~/
 
-2. Установить [esp-homekit-sdk](https://github.com/espressif/esp-homekit-sdk)
+
+### 2. Установить [esp-homekit-sdk](https://github.com/espressif/esp-homekit-sdk)
 Предпочтительное место установки в корень домашней директории ~/
 
-3. Скачать репозиторий с проектом
-Предпочтиельная директория -- домашний каталог:
+
+### 3. Скачать репозиторий с проектом
 ```bash
 cd ~/
 git clone https://github.com/nikmosyl/esp32c3_led_strip_homekit.git
 ```
 
-4. Настроить параметры HomeKit устройства и светодиодной ленты
+
+### 4. Настроить параметры HomeKit устройства и светодиодной ленты
 Файл esp32c3_led_strip_homekit/frimware/lightbulb/main/app_main.c строка 162:
 ```C
 hap_acc_cfg_t cfg = {
@@ -63,7 +66,8 @@ hap_acc_cfg_t cfg = {
 #define LED_COUNT 10          //количество светодиодов на светодиодной ленте
 ```
 
-4. Прописать переменные окружения (можно пропустить при установке idf и sdk по предпочтительным путям)
+
+### 5. Прописать переменные окружения (можно пропустить при установке idf и sdk по предпочтительным путям)
 Можно либо прописать временные переменные окружения (указать путь до esp-homekit-sdk):
 ```bash
 export HOMEKIT_PATH=~/esp/esp-homekit-sdk 
@@ -74,7 +78,8 @@ set(HOMEKIT_PATH ~/esp/esp-homekit-sdk)
 ```
 вместо ~/esp/esp-homekit-sdk указать свой путь к каталогу esp-homekit-sdk
 
-5. Установить пароль Wi-Fi
+
+### 6. Установить пароль Wi-Fi
 Можно либо оставить всё как есть и тогда при первом запуске в консоль выведется QR код для подключения через [Espressif Provisioning Apps](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/provisioning/provisioning.html#provisioning-tools) 
 
 Либо зашить пароль от Wi-Fi в контроллер жёстко:
@@ -87,13 +92,19 @@ cd ~/esp32c3_led_strip_homekit/frimware/lightbulb
 idf.py set-target esp32c3
 idf.py menuconfig
 ```
-В разделе **App Wi-Fi** -> **Source of Wi-Fi Credentials** выбере **Use Hardcoded**
-Введите имя и пароль точки доступа
-Не забудьте нажать S (Save) и Enter после этого
 
-6. Прошить плату
-Для этого нужно подключить плату к ПК, убедиться что она видна в списке устройств и к её последовательному порту есть доступ;
+В разделе _**App Wi-Fi** -> **Source of Wi-Fi Credentials**_ нужно установить галочку на **Use Hardcoded**
+
+В появившиеся поля необходимо ввести имя и пароль точки доступа
+
+Нажать S (Save) и Enter после этого
+
+
+### 7. Прошить плату
+Для этого нужно подключить плату к ПК, убедиться, что она видна в списке устройств и к её последовательному порту есть доступ;
+
 Перевести плату в режим прошивки (на плате из раздела Hardware это делается путём нажатия кнопки RST при удерживании кнопки BOOT);
+
 Собрать прошивку:
 ```bash
 idf.py build
@@ -103,8 +114,10 @@ idf.py build
 idf.py flash
 ```
 
-7. После прошивки
-Перезагрузите плату, дождитесь пока она подключится к Wi-Fi и отобразиться в меню добавления новых устройств HomeKit (на iPhone приложение **Дом** -> **+** -> **Другие параметры** выберете устройство, код 11122333) 
+
+### 8. После прошивки
+Перезагрузить плату
+Дождаться пока она подключится к Wi-Fi и отобразится в меню добавления новых устройств HomeKit (на iPhone приложение _**Дом** -> **+** -> **Другие параметры** -> **выберете устройство**_, код 11122333) 
 
 
 
