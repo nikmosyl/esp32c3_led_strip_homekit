@@ -1,4 +1,6 @@
 # ESP32 LED Strip WS2812 HomeKit
+[ru](https://github.com/nikmosyl/esp32c3_led_strip_homekit/blob/main/Readme/Img/README-ru.md)
+
 Hardware и Frimware для контроллера адресной светодиодной ленты на базе ESP32-C3
 
 ## Hardware
