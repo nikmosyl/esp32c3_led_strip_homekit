@@ -1,7 +1,7 @@
 # ESP32 LED Strip WS2812 HomeKit
-[ru](https://github.com/nikmosyl/esp32c3_led_strip_homekit/blob/main/Readme/Img/README-ru.md)
+[ru](https://github.com/nikmosyl/esp32c3_led_strip_homekit/blob/main/Readme/README-ru.md)
 
-Hardware и Frimware для контроллера адресной светодиодной ленты на базе ESP32-C3
+Hardware and Frimware for an addressable LED strip controller based on ESP32-C3
 
 ## Hardware
 
@@ -13,45 +13,45 @@ Hardware и Frimware для контроллера адресной светод
   <img src="/Readme/Img/bottom.png" weight=50>
 </kbd>
 
-[веб превью altium 365](https://365.altium.com/files/029D88F9-241C-48A4-977B-14C8D9AD6741?variant=[No+Variations])
+[altium 365 web preview](https://365.altium.com/files/029D88F9-241C-48A4-977B-14C8D9AD6741?variant=[No+Variations])
 
-Заказать можно [тут](https://www.pcbway.com/project/shareproject/ws2812esp32_3_v1_792a8e86.html)
+You can order it [here](https://www.pcbway.com/project/shareproject/ws2812esp32_3_v1_792a8e86.html)
 
-На плате:
-- [Входной разъём](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS22WR00/20422799) для питание контролера и светодиодной ленты (светодиодная лента WS2812 или аналогичная с питанием +5V)
-- [Выходной разъём](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS32WR00/20426575) для питания и управляющего сигнала адресной светодиодной лентой
-- USB type C для программирования контроллера ESP32-C3
+On board:
+- [Input connector](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS22WR00/20422799) for power supply of the controller and LED strip (LED strip WS2812 or similar with +5V power supply)
+- [Output connector](https://www.digikey.com/en/products/detail/amphenol-cs-commercial-products/FLTS32WR00/20426575) for power supply and control signal for addressable LED strip
+- USB type C for programming ESP32-C3 controller
 
 ## Frimware
-Основано на [SDK](https://github.com/espressif/esp-homekit-sdk) от Espressif 
+Based on Espressif [SDK](https://github.com/espressif/esp-homekit-sdk)
 
-Общие шаги по установке c использованием исходников:
+General installation steps using sources:
 
-### 1. Установить [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/get-started/linux-macos-setup.html)
-Предпочительная версия v5.2.1
+### 1. Install [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/get-started/linux-macos-setup.html)
+Preferred version v5.2.1
 
-Предпочтительное место установки в корень домашней директории ~/
-
-
-### 2. Установить [esp-homekit-sdk](https://github.com/espressif/esp-homekit-sdk)
-Предпочтительное место установки в корень домашней директории ~/
+Preferred installation location is at the root of your home directory ~/
 
 
-### 3. Скачать репозиторий с проектом
+### 2. Install [esp-homekit-sdk](https://github.com/espressif/esp-homekit-sdk)
+Preferred installation location is at the root of your home directory ~/
+
+
+### 3. Download the repository with the project
 ```bash
 cd ~/
 git clone https://github.com/nikmosyl/esp32c3_led_strip_homekit.git
 ```
 
 
-### 4. Настроить параметры HomeKit устройства и светодиодной ленты
-Файл esp32c3_led_strip_homekit/frimware/lightbulb/main/app_main.c строка 162:
+### 4. Configure HomeKit device and LED strip settings
+File esp32c3_led_strip_homekit/frimware/lightbulb/main/app_main.c line 162:
 ```C
 hap_acc_cfg_t cfg = {
-    .name = "Esp-Light",                  //отображаемое в приложении Дом название устройства
+    .name = "Esp-Light",                  //device name displayed in the Home app
     .manufacturer = "Espressif",          
     .model = "EspLight01",
-    .serial_num = "202405030213",         //при использовании нескольких устройств номер должен быть уникальным
+    .serial_num = "202405030213",         //when using multiple devices, the number must be unique
     .fw_rev = "0.1.0",
     .hw_rev = "1.0",
     .pv = "1.1.0",
@@ -59,69 +59,69 @@ hap_acc_cfg_t cfg = {
     .cid = HAP_CID_LIGHTING,
 };
 ```
-Файл frimware/lightbulb/main/Libs/internal_led/internal_led.c строка 10:
+File frimware/lightbulb/main/Libs/internal_led/internal_led.c line 10:
 ```C
-#define BLUE_LED 5    //номер GPIO с отладочным свтодиодом на используемой плате
+#define BLUE_LED 5    //GPIO number with debug LED on the board used
 ```
-Файл frimware/lightbulb/main/Libs/led_strip/led_strip_control.c строка 14:
+File frimware/lightbulb/main/Libs/led_strip/led_strip_control.c line 14:
 ```C
-#define FLOW 30               //задержка в милесекундах между включениями соседних сетодиодов на ленте
-#define LED_STRIP_GPIO 7      //номер GPIO к которому подлючен контакт DI светодиодной ленты
-#define LED_COUNT 10          //количество светодиодов на светодиодной ленте
+#define FLOW 30               //delay in milliseconds between switching on adjacent LEDs on the strip
+#define LED_STRIP_GPIO 7      //GPIO number to which the DI pin of the LED strip is connected
+#define LED_COUNT 10          //number of LEDs on LED strip
 ```
 
 
-### 5. Прописать переменные окружения (можно пропустить при установке idf и sdk по предпочтительным путям)
-Можно либо прописать временные переменные окружения (указать путь до esp-homekit-sdk):
+### 5. Set environment variables (can be skipped when installing idf and sdk in preferred paths)
+You can either register temporary environment variables (specify the path to esp-homekit-sdk):
 ```bash
 export HOMEKIT_PATH=~/esp/esp-homekit-sdk 
 ```
-Либо отредоктировать файл frimware/lightbulb/CMakeLists.txt строка 11:
+Or edit the file firmware/lightbulb/CMakeLists.txt line 11:
 ```CMake
 set(HOMEKIT_PATH ~/esp/esp-homekit-sdk)
 ```
-вместо ~/esp/esp-homekit-sdk указать свой путь к каталогу esp-homekit-sdk
+Instead of ~/esp/esp-homekit-sdk, specify your path to the esp-homekit-sdk directory
 
 
-### 6. Установить пароль Wi-Fi
-Можно либо оставить всё как есть и тогда при первом запуске в консоль выведется QR код для подключения через [Espressif Provisioning Apps](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/provisioning/provisioning.html#provisioning-tools) 
+### 6. Set Wi-Fi password
+You can either leave everything as it is, and then upon first launch, a QR code will be displayed in the console for connecting via [Espressif Provisioning Apps](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/provisioning/provisioning.html#provisioning-tools) 
 
-Либо зашить пароль от Wi-Fi в контроллер жёстко:
+Or hardcode the Wi-Fi password into the controller:
 ```bash
 cd ~/esp32c3_led_strip_homekit/frimware/lightbulb
 . ~/esp/esp-idf/export.sh
 ```
-Здесь выбран прошиваемый микроконтроллер esp32c3 как на плате из раздела Hardware, необходимо указать тот, который стоит на прошиваемой плате
+Here the esp32c3 microcontroller to be flashed is selected as on the board from the Hardware section, you must specify the one that is on the board to be flashed
 ```bash
 idf.py set-target esp32c3
 idf.py menuconfig
 ```
 
-В разделе _**App Wi-Fi** -> **Source of Wi-Fi Credentials**_ нужно установить галочку на **Use Hardcoded**
+In the section _**App Wi-Fi** -> **Source of Wi-Fi Credentials**_ you need to check the box for **Use Hardcoded**
 
-В появившиеся поля необходимо ввести имя и пароль точки доступа
+In the fields that appear, you must enter the name and password of the access point
 
-Нажать S (Save) и Enter после этого
+Press S (Save) and Enter after that
 
 
-### 7. Прошить плату
-Для этого нужно подключить плату к ПК, убедиться, что она видна в списке устройств и к её последовательному порту есть доступ;
+### 7. Flash the board
+To do this, you need to connect the board to the PC, make sure that it is visible in the list of devices and there is access to its serial port;
 
-Перевести плату в режим прошивки (на плате из раздела Hardware это делается путём нажатия кнопки RST при удерживании кнопки BOOT);
+Switch the board to firmware mode (on the board from the Hardware section this is done by pressing the RST button while holding down the BOOT button);
 
-Собрать прошивку:
+Build firmware:
 ```bash
 idf.py build
 ```
-Загрузить прошивку на плату:
+Upload firmware to the board:
 ```bash
 idf.py flash
 ```
 
 
-### 8. После прошивки
-Перезагрузить плату
-Дождаться пока она подключится к Wi-Fi и отобразится в меню добавления новых устройств HomeKit (на iPhone приложение _**Дом** -> **+** -> **Другие параметры** -> **выберете устройство**_, код 11122333) 
+### 8. After the firmware
+Reboot the board
+Wait until it connects to Wi-Fi and appears in the menu for adding new HomeKit devices (on iPhone, _**Home** app -> **+** -> **Other options** -> **select device**_ , code 11122333)
 
 
 
